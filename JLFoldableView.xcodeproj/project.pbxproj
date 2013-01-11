@@ -16,6 +16,10 @@
 		03712F2316A0493500626BBC /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 03712F2216A0493500626BBC /* Default.png */; };
 		03712F2516A0493500626BBC /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03712F2416A0493500626BBC /* Default@2x.png */; };
 		03712F2716A0493500626BBC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03712F2616A0493500626BBC /* Default-568h@2x.png */; };
+		03712F3016A0495C00626BBC /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03712F2F16A0495C00626BBC /* JLFoldableView.m */; };
+		03712F3316A0499D00626BBC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03712F3116A0499500626BBC /* QuartzCore.framework */; };
+		03712F3816A0535900626BBC /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03712F3716A0533200626BBC /* RootViewController.m */; };
+		03712F3916A0535900626BBC /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03712F3516A04A7700626BBC /* UIView+Screenshot.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,13 @@
 		03712F2216A0493500626BBC /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		03712F2416A0493500626BBC /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		03712F2616A0493500626BBC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		03712F2E16A0495C00626BBC /* JLFoldableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JLFoldableView.h; path = JLFoldableView/JLFoldableView.h; sourceTree = "<group>"; };
+		03712F2F16A0495C00626BBC /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JLFoldableView.m; path = JLFoldableView/JLFoldableView.m; sourceTree = "<group>"; };
+		03712F3116A0499500626BBC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		03712F3416A04A7700626BBC /* UIView+Screenshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIView+Screenshot.h"; path = "JLFoldableView/UIView+Screenshot.h"; sourceTree = "<group>"; };
+		03712F3516A04A7700626BBC /* UIView+Screenshot.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIView+Screenshot.m"; path = "JLFoldableView/UIView+Screenshot.m"; sourceTree = "<group>"; };
+		03712F3616A0533200626BBC /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		03712F3716A0533200626BBC /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03712F3316A0499D00626BBC /* QuartzCore.framework in Frameworks */,
 				03712F1116A0493500626BBC /* UIKit.framework in Frameworks */,
 				03712F1316A0493500626BBC /* Foundation.framework in Frameworks */,
 				03712F1516A0493500626BBC /* CoreGraphics.framework in Frameworks */,
@@ -68,6 +80,7 @@
 		03712F0F16A0493500626BBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03712F3116A0499500626BBC /* QuartzCore.framework */,
 				03712F1016A0493500626BBC /* UIKit.framework */,
 				03712F1216A0493500626BBC /* Foundation.framework */,
 				03712F1416A0493500626BBC /* CoreGraphics.framework */,
@@ -80,6 +93,9 @@
 			children = (
 				03712F1F16A0493500626BBC /* AppDelegate.h */,
 				03712F2016A0493500626BBC /* AppDelegate.m */,
+				03712F3616A0533200626BBC /* RootViewController.h */,
+				03712F3716A0533200626BBC /* RootViewController.m */,
+				03712F2D16A0493C00626BBC /* JLFoldableView */,
 				03712F1716A0493500626BBC /* Supporting Files */,
 			);
 			path = JLFoldableView;
@@ -97,6 +113,17 @@
 				03712F2616A0493500626BBC /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		03712F2D16A0493C00626BBC /* JLFoldableView */ = {
+			isa = PBXGroup;
+			children = (
+				03712F2E16A0495C00626BBC /* JLFoldableView.h */,
+				03712F2F16A0495C00626BBC /* JLFoldableView.m */,
+				03712F3416A04A7700626BBC /* UIView+Screenshot.h */,
+				03712F3516A04A7700626BBC /* UIView+Screenshot.m */,
+			);
+			name = JLFoldableView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,8 +191,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03712F3816A0535900626BBC /* RootViewController.m in Sources */,
+				03712F3916A0535900626BBC /* UIView+Screenshot.m in Sources */,
 				03712F1D16A0493500626BBC /* main.m in Sources */,
 				03712F2116A0493500626BBC /* AppDelegate.m in Sources */,
+				03712F3016A0495C00626BBC /* JLFoldableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
