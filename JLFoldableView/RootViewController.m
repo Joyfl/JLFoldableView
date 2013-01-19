@@ -18,32 +18,43 @@
 	self = [super init];
 	self.view.backgroundColor = [UIColor lightGrayColor];
 	
-	UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake( 10, 10, 300, 20 )];
+	UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake( 10, 10, 300, 40 )];
 	slider.maximumValue = 1;
 	slider.value = 1;
 	[slider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:slider];
 	
-	UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 300 )];
+	UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 200 )];
 	[contentView setBackgroundColor:[UIColor whiteColor]];
 	UILabel *topLabel = [[UILabel alloc] initWithFrame:contentView.frame];
 	[topLabel setText:@"A"];
 	[topLabel setBackgroundColor:[UIColor clearColor]];
-	[topLabel setFont:[UIFont boldSystemFontOfSize:300]];
+	[topLabel setFont:[UIFont boldSystemFontOfSize:200]];
 	[topLabel setTextAlignment:NSTextAlignmentCenter];
 	[contentView addSubview:topLabel];
-	[contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
 	
-	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 300 )];
-	_foldableView.contentView = contentView;
+	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 200 )];
+//	_foldableView.contentView = contentView;
 	[self.view addSubview:_foldableView];
+	
+	label2 = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 320, 120 )];
+	[label2 setText:@"B"];
+	[label2 setFont:[UIFont boldSystemFontOfSize:120]];
+	[label2 setTextAlignment:NSTextAlignmentCenter];
+	
+	_foldableView2 = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 250, 320, 120 )];
+	_foldableView2.contentView = label2;
+	[self.view addSubview:_foldableView2];
 	
 	return self;
 }
 
 - (void)sliderValueDidChange:(UISlider *)slider
 {
-	[_foldableView unfoldWithFraction:slider.value];
+	_foldableView.fraction = slider.value;
+	
+	_foldableView2.contentView = label2;
+	_foldableView2.fraction = slider.value;
 }
 
 @end

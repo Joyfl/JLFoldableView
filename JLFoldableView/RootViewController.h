@@ -12,6 +12,9 @@
 @interface RootViewController : UIViewController
 {
 	JLFoldableView *_foldableView;
+	JLFoldableView *_foldableView2;
+	
+	UILabel *label2;
 }
 
 @end
