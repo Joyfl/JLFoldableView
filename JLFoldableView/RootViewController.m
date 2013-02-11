@@ -34,7 +34,7 @@
 	[contentView addSubview:topLabel];
 	
 	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 200 )];
-//	_foldableView.contentView = contentView;
+	_foldableView.contentView = contentView;
 	[self.view addSubview:_foldableView];
 	
 	label2 = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 320, 120 )];
@@ -42,9 +42,10 @@
 	[label2 setFont:[UIFont boldSystemFontOfSize:120]];
 	[label2 setTextAlignment:NSTextAlignmentCenter];
 	
-	_foldableView2 = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 250, 320, 0 )];
-	_foldableView2.contentView = label2;
-	[self.view addSubview:_foldableView2];
+//	_foldableView2 = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 250, 320, 0 )];
+//	_foldableView2.contentView = label2;
+//	_foldableView2.fraction = 1;
+//	[self.view addSubview:_foldableView2];
 	
 	return self;
 }

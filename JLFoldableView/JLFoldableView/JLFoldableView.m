@@ -21,7 +21,7 @@
 	transform.m34 = -1 / 500.0;
 	[self.layer setSublayerTransform:transform];
 	
-	_foldCount = 3;
+	_foldCount = 2;
 	
 	_topViews = [[NSMutableArray alloc] init];
 	_bottomViews = [[NSMutableArray alloc] init];
@@ -36,12 +36,12 @@
 	{
 		UIView *topView = [[UIView alloc] init];
 		[self addSubview:topView];
-		topView.hidden = YES;
+//		topView.hidden = YES;
 		[_topViews addObject:topView];
 		
 		UIView *bottomView = [[UIView alloc] init];
 		[self addSubview:bottomView];
-		bottomView.hidden = YES;
+//		bottomView.hidden = YES;
 		[_bottomViews addObject:bottomView];
 		
 		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
@@ -67,6 +67,8 @@
 		[bottomView addSubview:bottomShadowView];
 		[_bottomShadowViews addObject:bottomShadowView];
 	}
+	
+	_fraction = 1;
 	
 	return self;
 }
@@ -100,13 +102,11 @@
 	{
 		UIView *topView = [_topViews objectAtIndex:i];
 		topView.layer.anchorPoint = CGPointMake( 0.5, 0 );
-//		topView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + _foldCount / -2 ) / _foldCount, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
-		topView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		topView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i * 2 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
 		
 		UIView *bottomView = [_bottomViews objectAtIndex:i];
 		bottomView.layer.anchorPoint = CGPointMake( 0.5, 1 );
-//		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + 1 + _foldCount / -2 ) / _foldCount, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
-		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + 1 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i * 2 + 1 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
 		
 		CGFloat imageHeight = image.size.height * image.scale / ( 2 * _foldCount );
 		CGImageRef topImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, imageHeight * i * 2, image.size.width * image.scale, imageHeight ) );
@@ -131,6 +131,7 @@
 	}
 	
 	_fullHeight = _contentView.frame.size.height / ( _foldCount + 1 );
+	_contentView.hidden = YES;
 	
 	self.fraction = originalFraction;
 }
@@ -153,23 +154,23 @@
 		UIView *topView = [_topViews objectAtIndex:i];
 		UIView *bottomView = [_bottomViews objectAtIndex:i];
 		
-		topView.hidden = bottomView.hidden = fraction == 1;
-		_contentView.hidden = !topView.hidden;
+//		topView.hidden = bottomView.hidden = fraction == 1;
+//		_contentView.hidden = !topView.hidden;
 		
 //		_contentView.hidden = YES;
-//		topView.hidden = bottomView.hidden = NO;
+		topView.hidden = bottomView.hidden = NO;
 		
 		CGFloat topY = 0;
 		if( i > 0 )
 		{
-			CGRect frame = topView.frame;
+//			CGRect frame = topView.frame;
 //			frame.origin.y = [[_bottomViews objectAtIndex:i - 1] frame].origin.y + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
-			topView.frame = frame;
+//			topView.frame = frame;
 			
 			topY = [[_bottomViews objectAtIndex:i - 1] frame].origin.y;// + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
 		}
 	
-		CATransform3D transform = CATransform3DMakeTranslation( 0, topY, 0 );
+		CATransform3D transform = CATransform3DMakeTranslation( 0, 0, 0 );
 		topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, -1, 0, 0 );
 		
 		
@@ -177,11 +178,11 @@
 		if( i > 0 )
 		{
 			
-//			bottomY = [[_bottomViews objectAtIndex:i - 1] frame].origin.y;// + topView.frame.size.height;
+			bottomY = topY + topView.frame.size.height * 2;
 			NSLog( @"%f, %f, %f", topView.frame.origin.y, topView.frame.size.height, bottomY );
 		}
 		
-		transform = CATransform3DMakeTranslation( 0, bottomY, 0 );
+		transform = CATransform3DMakeTranslation( 0, 0, 0 );
 		bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, 1, 0, 0 );
 		
 //		CGRect frame = bottomView.frame;
