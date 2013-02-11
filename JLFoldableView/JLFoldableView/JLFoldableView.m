@@ -58,12 +58,12 @@
 		
 		UIView *topShadowView = [[UIView alloc] init];
 		topShadowView.backgroundColor = [UIColor clearColor];
-//		[topShadowView.layer addSublayer:topGradientLayer];
+		[topShadowView.layer addSublayer:topGradientLayer];
 		[topView addSubview:topShadowView];
 		[_topShadowViews addObject:topShadowView];
 		
 		UIView *bottomShadowView = [[UIView alloc] init];
-//		[bottomShadowView.layer addSublayer:bottomGradientLayer];
+		[bottomShadowView.layer addSublayer:bottomGradientLayer];
 		[bottomView addSubview:bottomShadowView];
 		[_bottomShadowViews addObject:bottomShadowView];
 	}
@@ -122,8 +122,8 @@
 		CAGradientLayer *topGradientLayer = [_topGradientLayers objectAtIndex:i];
 		CAGradientLayer *bottomGradientLayer = [_bottomGradientLayers objectAtIndex:i];
 		
-		topGradientLayer.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-		bottomGradientLayer.frame = CGRectMake( 0, _contentView.frame.size.height / -2, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		topGradientLayer.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		bottomGradientLayer.frame = CGRectMake( 0, _contentView.frame.size.height / ( -2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
 		
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
@@ -149,40 +149,24 @@
 	if( fraction < 0 ) fraction = 0;
 	
 	float theta = asinf( fraction );
-	float h = _fullHeight * sinf( theta );
 	
 	for( NSInteger i = 0; i < _foldCount; i++ )
 	{
 		UIView *topView = [_topViews objectAtIndex:i];
 		UIView *bottomView = [_bottomViews objectAtIndex:i];
 		
-//		topView.hidden = bottomView.hidden = fraction == 1;
-//		_contentView.hidden = !topView.hidden;
-		
-//		_contentView.hidden = YES;
-		topView.hidden = bottomView.hidden = NO;
+		topView.hidden = bottomView.hidden = fraction == 1;
+		_contentView.hidden = !topView.hidden;
 		
 		CGFloat topY = -i * _contentView.frame.size.height * ( 1 - sinf( theta ) ) / _foldCount;
 	
 		CATransform3D transform = CATransform3DMakeTranslation( 0, topY, 0 );
 		topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - theta, -1, 0, 0 );
 		
-//		topView.layer.transform = CATransform3DMakeRotation( M_PI / 2 - theta, -1, 0, 0 );
-		
-		
-		
 		CGFloat bottomY = -1 * ( i + 1 ) * _contentView.frame.size.height * ( 1 - sinf( theta ) ) / _foldCount;
-//		if( i > 0 )
-//		{
-//			
-//			bottomY = topY + topView.frame.size.height;
-//			NSLog( @"%f, %f, %f", topView.frame.origin.y, topView.frame.size.height, bottomY );
-//		}
 		
 		transform = CATransform3DMakeTranslation( 0, bottomY, 0 );
 		bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - theta, 1, 0, 0 );
-		
-//		bottomView.layer.transform = CATransform3DMakeRotation( M_PI / 2 - delta, 1, 0, 0 );
 		
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
