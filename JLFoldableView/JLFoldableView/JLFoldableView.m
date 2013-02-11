@@ -21,7 +21,7 @@
 	transform.m34 = -1 / 500.0;
 	[self.layer setSublayerTransform:transform];
 	
-	_foldCount = 2;
+	_foldCount = 3;
 	
 	_topViews = [[NSMutableArray alloc] init];
 	_bottomViews = [[NSMutableArray alloc] init];
@@ -97,7 +97,6 @@
 	[_contentView release];
 	
 	UIImage *image = [_contentView screenshot];
-	
 	for( NSInteger i = 0; i < _foldCount; i++ )
 	{
 		UIView *topView = [_topViews objectAtIndex:i];
@@ -107,6 +106,9 @@
 		UIView *bottomView = [_bottomViews objectAtIndex:i];
 		bottomView.layer.anchorPoint = CGPointMake( 0.5, 1 );
 		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i * 2 + 1 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		
+		NSLog( @"topView[%d].y : %f", i, topView.frame.origin.y );
+		NSLog( @"bottomView[%d].y : %f", i, bottomView.frame.origin.y );
 		
 		CGFloat imageHeight = image.size.height * image.scale / ( 2 * _foldCount );
 		CGImageRef topImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, imageHeight * i * 2, image.size.width * image.scale, imageHeight ) );
@@ -146,8 +148,8 @@
 	if( fraction > 1 ) fraction = 1;
 	if( fraction < 0 ) fraction = 0;
 	
-	float delta = asinf( fraction );
-	float h = _fullHeight * sinf( delta );
+	float theta = asinf( fraction );
+	float h = _fullHeight * sinf( theta );
 	
 	for( NSInteger i = 0; i < _foldCount; i++ )
 	{
@@ -160,34 +162,27 @@
 //		_contentView.hidden = YES;
 		topView.hidden = bottomView.hidden = NO;
 		
-		CGFloat topY = 0;
-		if( i > 0 )
-		{
-//			CGRect frame = topView.frame;
-//			frame.origin.y = [[_bottomViews objectAtIndex:i - 1] frame].origin.y + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
-//			topView.frame = frame;
-			
-			topY = [[_bottomViews objectAtIndex:i - 1] frame].origin.y;// + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
-		}
+		CGFloat topY = -i * _contentView.frame.size.height * ( 1 - sinf( theta ) ) / _foldCount;
 	
-		CATransform3D transform = CATransform3DMakeTranslation( 0, 0, 0 );
-		topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, -1, 0, 0 );
+		CATransform3D transform = CATransform3DMakeTranslation( 0, topY, 0 );
+		topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - theta, -1, 0, 0 );
+		
+//		topView.layer.transform = CATransform3DMakeRotation( M_PI / 2 - theta, -1, 0, 0 );
 		
 		
-		CGFloat bottomY = topView.frame.origin.y + topView.frame.size.height * 2;
-		if( i > 0 )
-		{
-			
-			bottomY = topY + topView.frame.size.height * 2;
-			NSLog( @"%f, %f, %f", topView.frame.origin.y, topView.frame.size.height, bottomY );
-		}
 		
-		transform = CATransform3DMakeTranslation( 0, 0, 0 );
-		bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, 1, 0, 0 );
+		CGFloat bottomY = -1 * ( i + 1 ) * _contentView.frame.size.height * ( 1 - sinf( theta ) ) / _foldCount;
+//		if( i > 0 )
+//		{
+//			
+//			bottomY = topY + topView.frame.size.height;
+//			NSLog( @"%f, %f, %f", topView.frame.origin.y, topView.frame.size.height, bottomY );
+//		}
 		
-//		CGRect frame = bottomView.frame;
-//		frame.origin.y = topView.frame.origin.y + topView.frame.size.height;
-//		bottomView.frame = frame;
+		transform = CATransform3DMakeTranslation( 0, bottomY, 0 );
+		bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - theta, 1, 0, 0 );
+		
+//		bottomView.layer.transform = CATransform3DMakeRotation( M_PI / 2 - delta, 1, 0, 0 );
 		
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];

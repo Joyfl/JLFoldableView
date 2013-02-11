@@ -33,7 +33,7 @@
 	[topLabel setTextAlignment:NSTextAlignmentCenter];
 	[contentView addSubview:topLabel];
 	
-	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 200 )];
+	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 0 )];
 	_foldableView.contentView = contentView;
 	[self.view addSubview:_foldableView];
 	
