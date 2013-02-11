@@ -13,21 +13,20 @@
 {
 	UIView *_contentView;
 	
-	UIView *_topView;
-	UIView *_bottomView;
+	NSMutableArray *_topViews;
+	NSMutableArray *_bottomViews;
 	
-	CAGradientLayer *_topGradientLayer;
-	CAGradientLayer *_bottomGradientLayer;
+	NSMutableArray *_topGradientLayers;
+	NSMutableArray *_bottomGradientLayers;
 	
-	UIView *_topShadowView;
-	UIView *_bottomShadowView;
+	NSMutableArray *_topShadowViews;
+	NSMutableArray *_bottomShadowViews;
 	
 	CGFloat _fullHeight;
 }
 
 @property (nonatomic, retain) UIView *contentView;
+@property (nonatomic, assign) NSInteger foldCount;
 @property (nonatomic, assign) CGFloat fraction;
-
-//- (void)unfoldWithFraction:(CGFloat)fraction;
 
 @end

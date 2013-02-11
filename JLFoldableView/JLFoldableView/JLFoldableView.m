@@ -21,35 +21,52 @@
 	transform.m34 = -1 / 500.0;
 	[self.layer setSublayerTransform:transform];
 	
+	_foldCount = 3;
 	
-	_topView = [[UIView alloc] init];
-	[self addSubview:_topView];
-	_topView.hidden = YES;
+	_topViews = [[NSMutableArray alloc] init];
+	_bottomViews = [[NSMutableArray alloc] init];
 	
-	_bottomView = [[UIView alloc] init];
-	[self addSubview:_bottomView];
-	_bottomView.hidden = YES;
+	_topGradientLayers = [[NSMutableArray alloc] init];
+	_bottomGradientLayers = [[NSMutableArray alloc] init];
 	
+	_topShadowViews = [[NSMutableArray alloc] init];
+	_bottomShadowViews = [[NSMutableArray alloc] init];
 	
-	_topGradientLayer = [CAGradientLayer layer];
-	_topGradientLayer.startPoint = CGPointMake( 0, 1 );
-	_topGradientLayer.endPoint = CGPointMake( 0, 0 );
-	_topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.5].CGColor, (id)[UIColor clearColor].CGColor];
-	
-	_bottomGradientLayer = [CAGradientLayer layer];
-	_bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
-	_bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
-	_bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.7].CGColor];
-	
-	
-	_topShadowView = [[UIView alloc] init];
-	_topShadowView.backgroundColor = [UIColor clearColor];
-	[_topShadowView.layer addSublayer:_topGradientLayer];
-	[_topView addSubview:_topShadowView];
-	
-	_bottomShadowView = [[UIView alloc] init];
-	[_bottomShadowView.layer addSublayer:_bottomGradientLayer];
-	[_bottomView addSubview:_bottomShadowView];
+	for( NSInteger i = 0; i < _foldCount; i++ )
+	{
+		UIView *topView = [[UIView alloc] init];
+		[self addSubview:topView];
+		topView.hidden = YES;
+		[_topViews addObject:topView];
+		
+		UIView *bottomView = [[UIView alloc] init];
+		[self addSubview:bottomView];
+		bottomView.hidden = YES;
+		[_bottomViews addObject:bottomView];
+		
+		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
+		topGradientLayer.startPoint = CGPointMake( 0, 1 );
+		topGradientLayer.endPoint = CGPointMake( 0, 0 );
+		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.5].CGColor, (id)[UIColor clearColor].CGColor];
+		[_topGradientLayers addObject:topGradientLayer];
+		
+		CAGradientLayer *bottomGradientLayer = [CAGradientLayer layer];
+		bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
+		bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
+		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.7].CGColor];
+		[_bottomGradientLayers addObject:bottomGradientLayer];
+		
+		UIView *topShadowView = [[UIView alloc] init];
+		topShadowView.backgroundColor = [UIColor clearColor];
+//		[topShadowView.layer addSublayer:topGradientLayer];
+		[topView addSubview:topShadowView];
+		[_topShadowViews addObject:topShadowView];
+		
+		UIView *bottomShadowView = [[UIView alloc] init];
+//		[bottomShadowView.layer addSublayer:bottomGradientLayer];
+		[bottomView addSubview:bottomShadowView];
+		[_bottomShadowViews addObject:bottomShadowView];
+	}
 	
 	return self;
 }
@@ -77,33 +94,50 @@
 	[self addSubview:_contentView];
 	[_contentView release];
 	
-	_topView.layer.anchorPoint = CGPointMake( 0.5, 0.5 );
-	_topView.frame = CGRectMake( 0, -0.25 * _contentView.frame.size.height, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	_topView.layer.anchorPoint = CGPointMake( 0.5, 0 );
-	
-	_bottomView.layer.anchorPoint = CGPointMake( 0.5, 0.5 );
-	_bottomView.frame = CGRectMake( 0, 0.75 * _contentView.frame.size.height, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	_bottomView.layer.anchorPoint = CGPointMake( 0.5, 1 );
-	
 	UIImage *image = [_contentView screenshot];
 	
-	CGImageRef topImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, 0, image.size.width * image.scale, image.size.height * image.scale / 2 ) );
-	[_topView.layer setContents:(id)topImage];
-	CFRelease( topImage );
+	for( NSInteger i = 0; i < _foldCount; i++ )
+	{
+		UIView *topView = [_topViews objectAtIndex:i];
+		topView.layer.anchorPoint = CGPointMake( 0.5, 0 );
+//		topView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + _foldCount / -2 ) / _foldCount, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		topView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		
+		UIView *bottomView = [_bottomViews objectAtIndex:i];
+		bottomView.layer.anchorPoint = CGPointMake( 0.5, 1 );
+//		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + 1 + _foldCount / -2 ) / _foldCount, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i + 1 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		
+		CGFloat imageHeight = image.size.height * image.scale / ( 2 * _foldCount );
+		CGImageRef topImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, imageHeight * i * 2, image.size.width * image.scale, imageHeight ) );
+		[topView.layer setContents:(id)topImage];
+		CFRelease( topImage );
+		
+		CGImageRef bottomImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, imageHeight * ( i * 2 + 1 ), image.size.width * image.scale, imageHeight ) );
+		[bottomView.layer setContents:(id)bottomImage];
+		CFRelease( bottomImage );
+		
+		CAGradientLayer *topGradientLayer = [_topGradientLayers objectAtIndex:i];
+		CAGradientLayer *bottomGradientLayer = [_bottomGradientLayers objectAtIndex:i];
+		
+		topGradientLayer.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
+		bottomGradientLayer.frame = CGRectMake( 0, _contentView.frame.size.height / -2, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		
+		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
+		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
+		
+		topShadowView.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+		bottomShadowView.frame = CGRectMake( 0, _contentView.frame.size.height / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
+	}
 	
-	CGImageRef bottomImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, image.size.height * image.scale / 2, image.size.width * image.scale, image.size.height * image.scale / 2 ) );
-	[_bottomView.layer setContents:(id)bottomImage];
-	CFRelease( bottomImage );
-	
-	_topGradientLayer.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	_bottomGradientLayer.frame = CGRectMake( 0, -0.5 * _contentView.frame.size.height, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	
-	_topShadowView.frame = CGRectMake( 0, 0, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	_bottomShadowView.frame = CGRectMake( 0, _contentView.frame.size.height / 2, _contentView.frame.size.width, _contentView.frame.size.height / 2 );
-	
-	_fullHeight = _contentView.frame.size.height / 2;
+	_fullHeight = _contentView.frame.size.height / ( _foldCount + 1 );
 	
 	self.fraction = originalFraction;
+}
+
+- (void)setFoldCount:(NSInteger)foldCount
+{
+	
 }
 
 - (void)setFraction:(CGFloat)fraction
@@ -111,20 +145,55 @@
 	if( fraction > 1 ) fraction = 1;
 	if( fraction < 0 ) fraction = 0;
 	
-	_topView.hidden = _bottomView.hidden = fraction == 1;
-	_contentView.hidden = !_topView.hidden;
-	
 	float delta = asinf( fraction );
 	float h = _fullHeight * sinf( delta );
 	
-	CATransform3D transform = CATransform3DMakeTranslation( 0, _fullHeight - h, 0 );
-	_topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, -1, 0, 0 );
+	for( NSInteger i = 0; i < _foldCount; i++ )
+	{
+		UIView *topView = [_topViews objectAtIndex:i];
+		UIView *bottomView = [_bottomViews objectAtIndex:i];
+		
+		topView.hidden = bottomView.hidden = fraction == 1;
+		_contentView.hidden = !topView.hidden;
+		
+//		_contentView.hidden = YES;
+//		topView.hidden = bottomView.hidden = NO;
+		
+		CGFloat topY = 0;
+		if( i > 0 )
+		{
+			CGRect frame = topView.frame;
+//			frame.origin.y = [[_bottomViews objectAtIndex:i - 1] frame].origin.y + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
+			topView.frame = frame;
+			
+			topY = [[_bottomViews objectAtIndex:i - 1] frame].origin.y;// + [[_bottomViews objectAtIndex:i - 1] frame].size.height;
+		}
 	
-	transform = CATransform3DMakeTranslation( 0, h - _fullHeight, 0 );
-	_bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, 1, 0, 0 );
-	
-	_topShadowView.alpha = 1 - fraction;
-	_bottomShadowView.alpha = 1 - fraction;
+		CATransform3D transform = CATransform3DMakeTranslation( 0, topY, 0 );
+		topView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, -1, 0, 0 );
+		
+		
+		CGFloat bottomY = topView.frame.origin.y + topView.frame.size.height * 2;
+		if( i > 0 )
+		{
+			
+//			bottomY = [[_bottomViews objectAtIndex:i - 1] frame].origin.y;// + topView.frame.size.height;
+			NSLog( @"%f, %f, %f", topView.frame.origin.y, topView.frame.size.height, bottomY );
+		}
+		
+		transform = CATransform3DMakeTranslation( 0, bottomY, 0 );
+		bottomView.layer.transform = CATransform3DRotate( transform, M_PI / 2 - delta, 1, 0, 0 );
+		
+//		CGRect frame = bottomView.frame;
+//		frame.origin.y = topView.frame.origin.y + topView.frame.size.height;
+//		bottomView.frame = frame;
+		
+		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
+		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
+		
+		topShadowView.alpha = 1 - fraction;
+		bottomShadowView.alpha = 1 - fraction;
+	}
 	
 	_fraction = fraction;
 }
