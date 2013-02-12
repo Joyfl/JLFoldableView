@@ -21,8 +21,6 @@
 	
 	NSMutableArray *_topShadowViews;
 	NSMutableArray *_bottomShadowViews;
-	
-	CGFloat _fullHeight;
 }
 
 @property (nonatomic, retain) UIView *contentView;

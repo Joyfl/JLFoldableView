@@ -12,6 +12,11 @@
 
 @implementation JLFoldableView
 
+- (id)init
+{
+	return self = [self initWithFrame:CGRectZero];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -20,8 +25,6 @@
 	CATransform3D transform = CATransform3DIdentity;
 	transform.m34 = -1 / 500.0;
 	[self.layer setSublayerTransform:transform];
-	
-	_foldCount = 3;
 	
 	_topViews = [[NSMutableArray alloc] init];
 	_bottomViews = [[NSMutableArray alloc] init];
@@ -32,50 +35,10 @@
 	_topShadowViews = [[NSMutableArray alloc] init];
 	_bottomShadowViews = [[NSMutableArray alloc] init];
 	
-	for( NSInteger i = 0; i < _foldCount; i++ )
-	{
-		UIView *topView = [[UIView alloc] init];
-		[self addSubview:topView];
-//		topView.hidden = YES;
-		[_topViews addObject:topView];
-		
-		UIView *bottomView = [[UIView alloc] init];
-		[self addSubview:bottomView];
-//		bottomView.hidden = YES;
-		[_bottomViews addObject:bottomView];
-		
-		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
-		topGradientLayer.startPoint = CGPointMake( 0, 1 );
-		topGradientLayer.endPoint = CGPointMake( 0, 0 );
-		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.2].CGColor, (id)[UIColor clearColor].CGColor];
-		[_topGradientLayers addObject:topGradientLayer];
-		
-		CAGradientLayer *bottomGradientLayer = [CAGradientLayer layer];
-		bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
-		bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
-		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.4].CGColor];
-		[_bottomGradientLayers addObject:bottomGradientLayer];
-		
-		UIView *topShadowView = [[UIView alloc] init];
-		topShadowView.backgroundColor = [UIColor clearColor];
-		[topShadowView.layer addSublayer:topGradientLayer];
-		[topView addSubview:topShadowView];
-		[_topShadowViews addObject:topShadowView];
-		
-		UIView *bottomShadowView = [[UIView alloc] init];
-		[bottomShadowView.layer addSublayer:bottomGradientLayer];
-		[bottomView addSubview:bottomShadowView];
-		[_bottomShadowViews addObject:bottomShadowView];
-	}
-	
-	_fraction = 1;
+	self.foldCount = 1;
+	self.fraction = 1;
 	
 	return self;
-}
-
-- (id)init
-{
-	return self = [self initWithFrame:CGRectZero];
 }
 
 
@@ -129,14 +92,65 @@
 		bottomShadowView.frame = CGRectMake( 0, _contentView.frame.size.height / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
 	}
 	
-	_fullHeight = _contentView.frame.size.height / ( _foldCount + 1 );
-	
 	self.fraction = originalFraction;
 }
 
 - (void)setFoldCount:(NSInteger)foldCount
 {
+	for( NSInteger i = 0; i < _foldCount; i++ )
+	{
+		[[_topViews objectAtIndex:i] removeFromSuperview];
+		[[_bottomViews objectAtIndex:i] removeFromSuperview];
+	}
 	
+	[_topViews removeAllObjects];
+	[_bottomViews removeAllObjects];
+	
+	[_topGradientLayers removeAllObjects];
+	[_bottomGradientLayers removeAllObjects];
+	
+	[_topShadowViews removeAllObjects];
+	[_bottomShadowViews removeAllObjects];
+	
+	_foldCount = foldCount;
+	NSLog( @"foldCount : %d", foldCount );
+	
+	for( NSInteger i = 0; i < _foldCount; i++ )
+	{
+		UIView *topView = [[UIView alloc] init];
+		[self addSubview:topView];
+		[_topViews addObject:topView];
+		
+		UIView *bottomView = [[UIView alloc] init];
+		[self addSubview:bottomView];
+		[_bottomViews addObject:bottomView];
+		
+		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
+		topGradientLayer.startPoint = CGPointMake( 0, 1 );
+		topGradientLayer.endPoint = CGPointMake( 0, 0 );
+		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.2].CGColor, (id)[UIColor clearColor].CGColor];
+		[_topGradientLayers addObject:topGradientLayer];
+		
+		CAGradientLayer *bottomGradientLayer = [CAGradientLayer layer];
+		bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
+		bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
+		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.4].CGColor];
+		[_bottomGradientLayers addObject:bottomGradientLayer];
+		
+		UIView *topShadowView = [[UIView alloc] init];
+		topShadowView.backgroundColor = [UIColor clearColor];
+		[topShadowView.layer addSublayer:topGradientLayer];
+		[topView addSubview:topShadowView];
+		[_topShadowViews addObject:topShadowView];
+		
+		UIView *bottomShadowView = [[UIView alloc] init];
+		[bottomShadowView.layer addSublayer:bottomGradientLayer];
+		[bottomView addSubview:bottomShadowView];
+		[_bottomShadowViews addObject:bottomShadowView];
+	}
+	
+	if( _contentView )
+		[self setContentView:_contentView];
 }
 
 - (void)setFraction:(CGFloat)fraction

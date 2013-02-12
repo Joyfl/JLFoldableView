@@ -18,11 +18,18 @@
 	self = [super init];
 	self.view.backgroundColor = [UIColor lightGrayColor];
 	
-	UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake( 10, 10, 300, 40 )];
-	slider.maximumValue = 1;
-	slider.value = 1;
-	[slider addTarget:self action:@selector(sliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
-	[self.view addSubview:slider];
+	UISlider *foldCountSlider = [[UISlider alloc] initWithFrame:CGRectMake( 10, 10, 300, 40 )];
+	foldCountSlider.maximumValue = 10;
+	foldCountSlider.minimumValue = 1;
+	foldCountSlider.continuous = NO;
+	foldCountSlider.value = 1;
+	[foldCountSlider addTarget:self action:@selector(foldCountSliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
+	[self.view addSubview:foldCountSlider];
+	
+	UISlider *fractionSlider = [[UISlider alloc] initWithFrame:CGRectMake( 10, 50, 300, 40 )];
+	fractionSlider.value = 1;
+	[fractionSlider addTarget:self action:@selector(fractionSliderValueDidChange:) forControlEvents:UIControlEventValueChanged];
+	[self.view addSubview:fractionSlider];
 	
 	UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 200 )];
 	[contentView setBackgroundColor:[UIColor whiteColor]];
@@ -33,29 +40,21 @@
 	[topLabel setTextAlignment:NSTextAlignmentCenter];
 	[contentView addSubview:topLabel];
 	
-	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 50, 320, 0 )];
+	_foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 100, 320, 0 )];
 	_foldableView.contentView = contentView;
 	[self.view addSubview:_foldableView];
-	
-	label2 = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 320, 120 )];
-	[label2 setText:@"B"];
-	[label2 setFont:[UIFont boldSystemFontOfSize:120]];
-	[label2 setTextAlignment:NSTextAlignmentCenter];
-	
-//	_foldableView2 = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, 250, 320, 0 )];
-//	_foldableView2.contentView = label2;
-//	_foldableView2.fraction = 1;
-//	[self.view addSubview:_foldableView2];
 	
 	return self;
 }
 
-- (void)sliderValueDidChange:(UISlider *)slider
+- (void)foldCountSliderValueDidChange:(UISlider *)slider
+{
+	_foldableView.foldCount = slider.value;
+}
+
+- (void)fractionSliderValueDidChange:(UISlider *)slider
 {
 	_foldableView.fraction = slider.value;
-	
-	_foldableView2.contentView = label2;
-	_foldableView2.fraction = slider.value;
 }
 
 @end
