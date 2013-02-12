@@ -113,7 +113,6 @@
 	[_bottomShadowViews removeAllObjects];
 	
 	_foldCount = foldCount;
-	NSLog( @"foldCount : %d", foldCount );
 	
 	for( NSInteger i = 0; i < _foldCount; i++ )
 	{
