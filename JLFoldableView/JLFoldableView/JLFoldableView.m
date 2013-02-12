@@ -47,13 +47,13 @@
 		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
 		topGradientLayer.startPoint = CGPointMake( 0, 1 );
 		topGradientLayer.endPoint = CGPointMake( 0, 0 );
-		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.5].CGColor, (id)[UIColor clearColor].CGColor];
+		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.2].CGColor, (id)[UIColor clearColor].CGColor];
 		[_topGradientLayers addObject:topGradientLayer];
 		
 		CAGradientLayer *bottomGradientLayer = [CAGradientLayer layer];
 		bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
 		bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
-		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.7].CGColor];
+		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.4].CGColor];
 		[_bottomGradientLayers addObject:bottomGradientLayer];
 		
 		UIView *topShadowView = [[UIView alloc] init];
@@ -107,9 +107,6 @@
 		bottomView.layer.anchorPoint = CGPointMake( 0.5, 1 );
 		bottomView.frame = CGRectMake( 0, _contentView.frame.size.height * ( i * 2 + 1 ) / ( 2 * _foldCount ), _contentView.frame.size.width, _contentView.frame.size.height / ( 2 * _foldCount ) );
 		
-		NSLog( @"topView[%d].y : %f", i, topView.frame.origin.y );
-		NSLog( @"bottomView[%d].y : %f", i, bottomView.frame.origin.y );
-		
 		CGFloat imageHeight = image.size.height * image.scale / ( 2 * _foldCount );
 		CGImageRef topImage = CGImageCreateWithImageInRect( [image CGImage], CGRectMake( 0, imageHeight * i * 2, image.size.width * image.scale, imageHeight ) );
 		[topView.layer setContents:(id)topImage];
@@ -133,7 +130,6 @@
 	}
 	
 	_fullHeight = _contentView.frame.size.height / ( _foldCount + 1 );
-	_contentView.hidden = YES;
 	
 	self.fraction = originalFraction;
 }
