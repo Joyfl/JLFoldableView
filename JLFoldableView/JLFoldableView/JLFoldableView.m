@@ -182,8 +182,9 @@
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
 		
-		topShadowView.alpha = 1 - fraction;
-		bottomShadowView.alpha = 1 - fraction;
+		CGFloat alpha = ( 1 - fraction ) * 0.8;
+		topShadowView.alpha = alpha;
+		bottomShadowView.alpha = alpha;
 		
 		NSLog( @"fraction : %f", fraction );
 		NSLog( @"alpha : %f", topShadowView.alpha );
