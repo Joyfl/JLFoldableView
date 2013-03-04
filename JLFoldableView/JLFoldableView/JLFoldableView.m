@@ -189,21 +189,21 @@
 	_fraction = fraction;
 }
 
-- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated completion:(void (^)(BOOL))completion
 {
 	if( !animated )
 		[self setFraction:fraction];
 	else
-		[self setFraction:fraction animated:animated withDuration:0.5];
+		[self setFraction:fraction animated:animated withDuration:0.5 completion:completion];
 }
 
-- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration completion:(void (^)(BOOL))completion
 {
 	if( !animated )
 		[self setFraction:fraction];
 	else
 	{
-		NSTimeInterval interval = 0.001;
+		NSTimeInterval interval = 1.0 / 60.0;
 		NSInteger tickCount = duration / interval;
 		
 		for( NSTimeInterval time = 0; time < duration; time += interval )
@@ -211,6 +211,8 @@
 			dispatch_time_t tickTime = dispatch_time( DISPATCH_TIME_NOW, time * NSEC_PER_SEC );
 			dispatch_after( tickTime, dispatch_get_main_queue(), ^(void){
 				self.fraction += 1.0 / tickCount;
+				if( time + interval >= duration && completion )
+					completion( YES );
 			});
 		}
 	}
