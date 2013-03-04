@@ -29,6 +29,9 @@
 @property (nonatomic, assign) NSArray *topGradientColors;
 @property (nonatomic, assign) NSArray *bottomGradientColors;
 
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated;
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration;
+
 - (void)setTopGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
 - (void)setBottomGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
 

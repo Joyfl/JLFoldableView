@@ -184,12 +184,36 @@
 		
 		topShadowView.alpha = 1 - fraction;
 		bottomShadowView.alpha = 1 - fraction;
-		
-		NSLog( @"fraction : %f", fraction );
-		NSLog( @"alpha : %f", topShadowView.alpha );
 	}
 	
 	_fraction = fraction;
+}
+
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated
+{
+	if( !animated )
+		[self setFraction:fraction];
+	else
+		[self setFraction:fraction animated:animated withDuration:0.5];
+}
+
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration
+{
+	if( !animated )
+		[self setFraction:fraction];
+	else
+	{
+		NSTimeInterval interval = 0.001;
+		NSInteger tickCount = duration / interval;
+		
+		for( NSTimeInterval time = 0; time < duration; time += interval )
+		{
+			dispatch_time_t tickTime = dispatch_time( DISPATCH_TIME_NOW, time * NSEC_PER_SEC );
+			dispatch_after( tickTime, dispatch_get_main_queue(), ^(void){
+				self.fraction += 1.0 / tickCount;
+			});
+		}
+	}
 }
 
 
