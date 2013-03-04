@@ -65,8 +65,8 @@
 - (void)buttonDidTouchUpInside
 {
 	_foldableView.fraction = 0;
-	[_foldableView setFraction:1 animated:YES completion:^(BOOL complete) {
-		NSLog( @"wow" );
+	[_foldableView setFraction:1 animated:YES withDuration:0.5 curve:UIViewAnimationCurveEaseIn completion:^(BOOL completion) {
+		NSLog( @"fin" );
 	}];
 }
 

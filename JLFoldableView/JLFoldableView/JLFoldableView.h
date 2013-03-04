@@ -31,6 +31,7 @@
 
 - (void)setFraction:(CGFloat)fraction animated:(BOOL)animated completion:(void (^)(BOOL complete))completion;
 - (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration completion:(void (^)(BOOL complete))completion;
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve completion:(void (^)(BOOL))completion;
 
 - (void)setTopGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
 - (void)setBottomGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
